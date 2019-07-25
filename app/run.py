@@ -78,7 +78,7 @@ def index():
             ],
 
             'layout': {
-                'title': 'Proportion of Messages <br> by Category',
+                'title': 'Message Ratio by Category',
                 'yaxis': {
                     'title': "Ratios",
                     'automargin':True
@@ -99,7 +99,7 @@ def index():
             ],
 
             'layout': {
-                'title': 'Frequency of top 10 words in percentage',
+                'title': 'Top 10 Words Frequency in Percentage',
                 'yaxis': {
                     'title': 'Frequency',
                     'automargin': True
