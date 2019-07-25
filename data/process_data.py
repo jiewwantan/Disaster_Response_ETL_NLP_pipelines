@@ -29,8 +29,8 @@ def clean_data(df):
             df: Cleaned dataframe
     """
     # create a dataframe of the 36 category columns
-    idx = categories['id']
-    categories = categories['categories'].str.split(";", expand=True)
+    idx = df['id']
+    categories = df['categories'].str.split(";", expand=True)
     categories['id'] = idx
     # select the first row in categories dataframe
     row = categories.iloc[0][0:-1]
@@ -76,9 +76,10 @@ def save_data(df, database_filename):
             None
     """
 
-    engine = create_engine('sqlite:///{}'.format(database_file_name))
-    db_file_name = database_file_name.split("/")[-1]  # extract file name from file path
-    table_name = db_file_name.split(".")[0]
+    engine = create_engine('sqlite:///{}'.format(database_filename))
+    # extract file name from file path
+    db_filename = database_filename.split("/")[-1]
+    table_name = db_filename.split(".")[0]
     df.to_sql(table_name, engine, index=False, if_exists='replace')
 
 
