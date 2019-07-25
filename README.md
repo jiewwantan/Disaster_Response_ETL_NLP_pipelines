@@ -6,6 +6,11 @@ This project analyzes disaster data from Figure Eight to build a model for an AP
 A web app is created for an emergency worker to input a new message and  have the message classified in several message categories. As such to be able to response to the message in the most timely and appropriate manner.  
 To understand the model and the data that trains it, the web app will visualize the past data. The Results section below displays its visualizations. 
 
+To build the model, the project has an ETL pipeline that process the message data `process_data.py` and save it to a SQL database `DisasterResponse.db`. 
+An ML pipeline `train_classifier.py` then loads the database and train a classifier using NLP techniques and Random Forest classifier. The trained model is then saved to a pickle file `classifier.pkl`. 
+
+The Flask web app loads the model to perform message classification with message entered by user. It also loads the SQL database to perform data visualization. 
+
 ## Instructions:
 1. Run the following commands in the project's root directory to set up your database and model.
 
