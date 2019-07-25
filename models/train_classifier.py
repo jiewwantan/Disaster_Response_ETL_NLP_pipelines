@@ -10,9 +10,13 @@ from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from sklearn.metrics import classification_report
 from sklearn.model_selection import GridSearchCV, train_test_split
 from sklearn.multioutput import MultiOutputClassifier
+from sklearn.multiclass import OneVsRestClassifier
 from sklearn.pipeline import Pipeline
 from sklearn.ensemble import RandomForestClassifier
 import pickle
+
+import warnings
+warnings.filterwarnings("ignore")
 
 
 def load_data(database_filepath):
@@ -62,13 +66,11 @@ def build_model():
     pipeline = Pipeline([
         ('vect', CountVectorizer()),
         ('tfidf', TfidfTransformer()),
-        ('clf', MultiOutputClassifier(RandomForestClassifier()))])
+        ('clf', MultiOutputClassifier(OneVsRestClassifier(RandomForestClassifier())))])
 
-    parameters = {
-        'tfidf__use_idf': (True, False),
-        'clf__estimator__n_estimators': [10, 50, 100]
-        'clf__estimator__min_samples_split': [2, 4, 8]
-    }
+    parameters = {'vect__ngram_range': ((1, 1), (1, 2)),
+                  'vect__max_df': (0.75, 1.0)
+                  }
     model = GridSearchCV(pipeline, param_grid=parameters)
 
     return model
@@ -88,7 +90,7 @@ def evaluate_model(model, X_test, Y_test, category_names):
 
     # print classification report
     print(classification_report(Y_test.values, y_pred, target_names=category_names))
-
+    print('Accuracy: {}'.format(np.mean(Y_test.values == y_pred)))
 
 def save_model(model, model_filepath):
     """
