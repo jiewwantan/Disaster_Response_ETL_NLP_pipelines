@@ -33,11 +33,11 @@ To understand the model and the data that trains it, the web app will visualize 
 
 ### Message Ratio Visualized
 
-[image3: https://github.com/jiewwantan/Disaster_Response_ETL_NLP_pipelines/blob/master/message_ratio.png "Message Ratio"
+[image3]: https://github.com/jiewwantan/Disaster_Response_ETL_NLP_pipelines/blob/master/message_ratio.png "Message Ratio"
 ![Message Ratio][image3]
 
 ### Word Frequency Visualized
 
-[image4: https://github.com/jiewwantan/Disaster_Response_ETL_NLP_pipelines/blob/master/words_freq.png "Word Frequency"
+[image4]: https://github.com/jiewwantan/Disaster_Response_ETL_NLP_pipelines/blob/master/words_freq.png "Word Frequency"
 ![Word Frequency][image4]
 
