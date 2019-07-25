@@ -8,7 +8,7 @@ from nltk.corpus import stopwords
 from nltk.stem.wordnet import WordNetLemmatizer
 
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
-from sklearn.metrics import classification_report
+from sklearn.metrics import classification_report, accuracy_score
 from sklearn.model_selection import GridSearchCV, train_test_split
 from sklearn.multioutput import MultiOutputClassifier
 from sklearn.multiclass import OneVsRestClassifier
@@ -33,6 +33,8 @@ def load_data(database_filepath):
     engine = create_engine('sqlite:///{}'.format(database_filepath))
     df = pd.read_sql_table('DisasterResponse', con=engine)
     X, Y = df['message'], df.iloc[:, 4:]
+    # Convert multiple category label to binary
+    Y['related'] = Y['related'].map(lambda x: 1 if x == 2 else x)
     category_names = Y.columns
 
     return X, Y, category_names
@@ -89,10 +91,15 @@ def evaluate_model(model, X_test, Y_test, category_names):
     """
     # predict
     y_pred = model.predict(X_test)
-
+    print("\n")
     # print classification report
+    print("################################ Classification report ##################################\n")
     print(classification_report(Y_test.values, y_pred, target_names=category_names))
-    print('Accuracy: {}'.format(np.mean(Y_test.values == y_pred)))
+
+    print("################## Classification accuracy scores fpr each category #####################\n")
+    for i in range(len(Y_test.columns)):
+        print("Accuracy score for {}: {} " .format(Y_test.columns[i], round(accuracy_score(Y_test.values[:, i], y_pred[:, i]),3)))
+    print("\n")
 
 def save_model(model, model_filepath):
     """
@@ -109,9 +116,6 @@ def main():
         database_filepath, model_filepath = sys.argv[1:]
         print('Loading data...\n    DATABASE: {}'.format(database_filepath))
         X, Y, category_names = load_data(database_filepath)
-
-        # Change multi category label to binary
-        Y['related'] = Y['related'].map(lambda x: 1 if x == 2 else x)
         X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2)
         
         print('Building model...')
