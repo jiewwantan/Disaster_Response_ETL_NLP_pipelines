@@ -2,6 +2,7 @@ import sys
 # import libraries
 from sqlalchemy import create_engine
 import pandas as pd
+import numpy as np
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from nltk.stem.wordnet import WordNetLemmatizer
@@ -69,7 +70,8 @@ def build_model():
         ('clf', MultiOutputClassifier(OneVsRestClassifier(RandomForestClassifier())))])
 
     parameters = {'vect__ngram_range': ((1, 1), (1, 2)),
-                  'vect__max_df': (0.75, 1.0)
+                  'vect__max_features': (500, 1000, 5000),
+                  'vect__max_df': (0.5, 0.75, 1.0)
                   }
     model = GridSearchCV(pipeline, param_grid=parameters)
 
@@ -107,6 +109,9 @@ def main():
         database_filepath, model_filepath = sys.argv[1:]
         print('Loading data...\n    DATABASE: {}'.format(database_filepath))
         X, Y, category_names = load_data(database_filepath)
+
+        # Change multi category label to binary
+        Y['related'] = Y['related'].map(lambda x: 1 if x == 2 else x)
         X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2)
         
         print('Building model...')
