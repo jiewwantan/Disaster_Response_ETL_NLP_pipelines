@@ -3,6 +3,7 @@ import sys
 from sqlalchemy import create_engine
 import pandas as pd
 import numpy as np
+import re
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from nltk.stem.wordnet import WordNetLemmatizer
@@ -66,8 +67,9 @@ def build_model():
     """
     The function to build with defined pipeline trained with GridSearchCV on a range of parameters.
     """
+
     pipeline = Pipeline([
-        ('vect', CountVectorizer()),
+        ('vect', CountVectorizer(tokenizer=tokenize)),
         ('tfidf', TfidfTransformer()),
         ('clf', MultiOutputClassifier(OneVsRestClassifier(RandomForestClassifier())))])
 
