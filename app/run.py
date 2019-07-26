@@ -3,6 +3,7 @@ import plotly
 import pandas as pd
 import numpy as np
 import string
+import random
 from nltk.corpus import stopwords
 from flask import Flask
 from flask import render_template, request
@@ -49,13 +50,21 @@ def index():
     most_frequent_words_names = list(most_frequent_words.index)
     most_frequent_words_pct = 100 * np.array(list(most_frequent_words.values)) / df.shape[0]
 
-
+    colorscale = ['Greys', 'YlGnBu', 'Greens', 'YlOrRd', 'Bluered', 'RdBu',
+     'Reds', 'Blues', 'Picnic', 'Rainbow', 'Portland', 'Jet',
+     'Hot', 'Blackbody', 'Earth', 'Electric', 'Viridis', 'Cividis']
+    values = list(range(40))
     graphs = [
         {
             'data': [
                 Bar(
                     x=genre_names,
-                    y=genre_counts
+                    y=genre_counts,
+                    marker = dict(
+                        color = values,
+                        colorscale=colorscale[random.randrange (0,len(colorscale),1)],
+                        opacity=0.99
+                    )
                 )
             ],
 
@@ -73,7 +82,12 @@ def index():
             'data': [
                 Bar(
                     x=categories,
-                    y=category_ratios
+                    y=category_ratios,
+                    marker = dict(
+                        color = values,
+                        colorscale=colorscale[random.randrange (0,len(colorscale),1)],
+                        opacity=0.99
+                    )
                 )
             ],
 
@@ -94,7 +108,13 @@ def index():
             'data': [
                 Bar(
                     x=most_frequent_words_names,
-                    y=most_frequent_words_pct
+                    y=most_frequent_words_pct,
+                    marker = dict(
+                        color = values,
+                        colorscale=colorscale[random.randrange (0,len(colorscale),1)],
+                        opacity=0.99
+                    )
+
                 )
             ],
 
