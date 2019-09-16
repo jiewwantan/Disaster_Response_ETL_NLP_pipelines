@@ -98,7 +98,7 @@ def evaluate_model(model, X_test, Y_test, category_names):
     print("################################ Classification report ##################################\n")
     print(classification_report(Y_test.values, y_pred, target_names=category_names))
 
-    print("################## Classification accuracy scores fpr each category #####################\n")
+    print("################## Classification accuracy scores for each category #####################\n")
     for i in range(len(Y_test.columns)):
         print("Accuracy score for {}: {} " .format(Y_test.columns[i], round(accuracy_score(Y_test.values[:, i], y_pred[:, i]),3)))
     print("\n")
